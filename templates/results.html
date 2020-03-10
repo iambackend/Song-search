@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Results of Song Search</title>
+</head>
+<body>
+    <h1>Song Search</h1>
+    <form method="get" action="search">
+        <input name="query" id="query" value = {{ query }} required>
+        <input type="submit" value="Search">
+    </form>
+    <h2>Results</h2>
+    <ul>
+        {% for song in songs %}
+            <li class="result">
+                <a href="{{ song.url }}">
+                    <h3>{{ song.title }}</h3>
+                    <h4>{{ song.artist }}</h4>
+                    <p>{{ song.text[:400] }}</p>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
