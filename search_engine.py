@@ -376,8 +376,9 @@ def fancy_search(collection, index, permuterm, soundex_index, query):
             res = [doc for doc in res if doc in docs]
         else:
             # print(word + " is misspell")
-            terms = soundex_index[soundex(word)]
-            if len(terms) == 0:
+            try:
+                terms = soundex_index[soundex(word)]
+            except KeyError:
                 return []
             min_dis = 1000
             for term in terms:
