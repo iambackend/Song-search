@@ -39,6 +39,7 @@ def main_page():
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get("query")
+    print(len(auxiliary_add))
     if rebuild:
         rebuild_indeces()
         return "its working"

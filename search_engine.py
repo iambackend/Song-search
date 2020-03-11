@@ -235,7 +235,7 @@ class Index:
 
 # never used, lol
 def search_and(collection, index, query):
-    relevant_documents = range(max(collection.keys()))
+    relevant_documents = range(max(collection.keys() or [0]))
     for lemma in query:
         relevant_documents = [i for i in index[lemma] if i in relevant_documents]
     return relevant_documents
@@ -332,12 +332,12 @@ def search_permuterm(term, permuterm):
 
 
 def search_or(collection, index, query):
-    relevant_documents = [0] * max(collection.keys())
+    relevant_documents = [0] * max(collection.keys() or [0])
     for lemma in query:
         for i in index[lemma]:
             relevant_documents[i] = 1
     res = []
-    for i in range(max(collection.keys())):
+    for i in range(max(collection.keys() or [0])):
         if relevant_documents[i] == 1:
             res.append(i)
     return res
@@ -358,7 +358,7 @@ def merge_and(results):
 
 def fancy_search(collection, index, permuterm, soundex_index, query):
     query = preprocess(query)
-    res = range(max(collection.keys()))
+    res = range(max(collection.keys() or [0]))
     for word in query:
         if word in index:
             print(word + " is regular")

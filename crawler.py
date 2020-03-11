@@ -29,5 +29,5 @@ def run_crawler(*args):
                 if item in uncut_collection:
                     cut_collection[key] = item
                     del uncut_collection[key]
-            auxiliary_drop = {}
-            auxiliary_add = {}
+            auxiliary_drop.clear()
+            auxiliary_add.clear()
