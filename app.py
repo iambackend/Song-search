@@ -46,6 +46,7 @@ def search():
         rebuild_indeces()
     with lock:
         relevant = se.fancy_search(collection, index, permuterm, soundex_index, query)
+        print(len(relevant))
         aux_index, aux_soundex, aux_permuterm = get_aux(auxiliary_add)
         relevant.extend(se.fancy_search(auxiliary_add, aux_index, aux_soundex, aux_permuterm, query))
         relevant = [song for song in relevant if song not in auxiliary_drop]
@@ -58,7 +59,7 @@ def run_flask(*args):
     collection, auxiliary_add, auxiliary_drop, lock, rebuild = args
     print(len(collection))
     if rebuild:
-        rebuild_indeces(from_disc=True)
+        rebuild_indeces(from_disc=False)
     else:
-        rebuild_indeces(from_disc=True)
+        rebuild_indeces(from_disc=False)
     app.run()

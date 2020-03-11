@@ -363,7 +363,7 @@ def fancy_search(collection, index, permuterm, soundex_index, query):
     res = range(len(collection))
     for word in query:
         if word in index:
-            # print(word + " is regular")
+            print(word + " is regular")
             docs = index[word]
             res = [doc for doc in res if doc in docs]
         elif '*' in word:
@@ -375,7 +375,7 @@ def fancy_search(collection, index, permuterm, soundex_index, query):
             docs = search_or(collection, index, terms)
             res = [doc for doc in res if doc in docs]
         else:
-            # print(word + " is misspell")
+            print(word + " is misspell")
             try:
                 terms = soundex_index[soundex(word)]
             except KeyError:
@@ -384,7 +384,7 @@ def fancy_search(collection, index, permuterm, soundex_index, query):
             for term in terms:
                 min_dis = min(levenshtein(term, word), min_dis)
             terms = [term for term in terms if levenshtein(term, word) == min_dis]
-            # print(terms)
+            print(terms)
             docs = search_or(collection, index, terms)
             res = [doc for doc in res if doc in docs]
     return [collection[i] for i in res]
