@@ -202,8 +202,7 @@ class Index:
 
     def make_index(self, collection):
         self.inverted_index = {}
-        i = 0
-        for song in collection:
+        for _id, song in collection.items():
             lemmas = []
             lemmas.extend(preprocess(song.artist))
             lemmas.extend(preprocess(song.title))
@@ -212,10 +211,9 @@ class Index:
             lemmas = set(lemmas)
             for lemma in lemmas:
                 if lemma in self.inverted_index:
-                    self.inverted_index[lemma].append(i)
+                    self.inverted_index[lemma].append(_id)
                 else:
-                    self.inverted_index[lemma] = [i]
-            i += 1
+                    self.inverted_index[lemma] = [_id]
 
     def save_index(self):
         with open("cache/index.json", "w") as file:
@@ -237,7 +235,7 @@ class Index:
 
 # never used, lol
 def search_and(collection, index, query):
-    relevant_documents = range(len(collection))
+    relevant_documents = range(max(collection.keys()))
     for lemma in query:
         relevant_documents = [i for i in index[lemma] if i in relevant_documents]
     return relevant_documents
@@ -334,12 +332,12 @@ def search_permuterm(term, permuterm):
 
 
 def search_or(collection, index, query):
-    relevant_documents = [0] * len(collection)
+    relevant_documents = [0] * max(collection.keys())
     for lemma in query:
         for i in index[lemma]:
             relevant_documents[i] = 1
     res = []
-    for i in range(len(collection)):
+    for i in range(max(collection.keys())):
         if relevant_documents[i] == 1:
             res.append(i)
     return res
@@ -360,7 +358,7 @@ def merge_and(results):
 
 def fancy_search(collection, index, permuterm, soundex_index, query):
     query = preprocess(query)
-    res = range(len(collection))
+    res = range(max(collection.keys()))
     for word in query:
         if word in index:
             print(word + " is regular")

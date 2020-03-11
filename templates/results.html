@@ -10,7 +10,7 @@
         <input name="query" id="query" value = "{{ query }}" required>
         <input type="submit" value="Search">
     </form>
-    <h2>Results</h2>
+    <h2>Got {{ res_num }} results</h2>
     <ul>
         {% for song in songs %}
             <li class="result">

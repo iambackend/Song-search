@@ -13,8 +13,8 @@ if __name__ == "__main__":
     full_collection = init_collection(110)
     pool = ThreadPool(3)
     lock = threading.Lock()
-    used, unused = full_collection[:100], full_collection[100:110]
-    auxiliary_add, auxiliary_drop = [], []
+    unused, used = {i: full_collection[i] for i in range(55)}, {i: full_collection[i] for i in range(55, 110)}
+    auxiliary_add, auxiliary_drop = {}, {}
     rebuild = False
     crawler_thread = threading.Thread(target=run_crawler, args=(used, unused, auxiliary_add, auxiliary_drop, lock, rebuild))
     crawler_thread.start()

@@ -12,7 +12,6 @@ rebuild = None
 lock = None
 auxiliary_add, auxiliary_drop = None, None
 
-
 def rebuild_indeces(from_disc=False):
     global collection, index, soundex_index, permuterm, rebuild, lock
     with lock:
@@ -23,8 +22,6 @@ def rebuild_indeces(from_disc=False):
         soundex_index = se.form_soundex(index.keys())
         permuterm = se.do_permuterm(index.keys())
         rebuild = False
-        for word in index:
-            print(word)
 
 
 def get_aux(collection):
@@ -44,20 +41,18 @@ def search():
     query = request.args.get("query")
     if rebuild:
         rebuild_indeces()
+        return "its working"
     with lock:
         relevant = se.fancy_search(collection, index, permuterm, soundex_index, query)
-        print(len(relevant))
         aux_index, aux_soundex, aux_permuterm = get_aux(auxiliary_add)
         relevant.extend(se.fancy_search(auxiliary_add, aux_index, aux_soundex, aux_permuterm, query))
         relevant = [song for song in relevant if song not in auxiliary_drop]
-    print(query)
-    return render_template('results.html', query=query, songs=relevant)
+    return render_template('results.html', query=query, songs=relevant, res_num=len(relevant))
 
 
 def run_flask(*args):
     global collection, index, soundex_index, permuterm, rebuild, lock, auxiliary_add, auxiliary_drop
     collection, auxiliary_add, auxiliary_drop, lock, rebuild = args
-    print(len(collection))
     if rebuild:
         rebuild_indeces(from_disc=False)
     else:
