@@ -12,6 +12,7 @@ rebuild = None
 lock = None
 auxiliary_add, auxiliary_drop = None, None
 
+
 def rebuild_indeces(from_disc=False):
     global collection, index, soundex_index, permuterm, rebuild, lock
     with lock:
@@ -21,7 +22,7 @@ def rebuild_indeces(from_disc=False):
             index = se.Index(collection)
         soundex_index = se.form_soundex(index.keys())
         permuterm = se.do_permuterm(index.keys())
-        rebuild = False
+        rebuild[0] = False
 
 
 def get_aux(collection):
@@ -39,14 +40,14 @@ def main_page():
 @app.route('/search', methods=['GET'])
 def search():
     query = request.args.get("query")
-    print(len(auxiliary_add))
-    if rebuild:
+    # print(auxiliary_add)
+    if rebuild[0]:
         rebuild_indeces()
-        return "its working"
     with lock:
         relevant = se.fancy_search(collection, index, permuterm, soundex_index, query)
         aux_index, aux_soundex, aux_permuterm = get_aux(auxiliary_add)
-        relevant.extend(se.fancy_search(auxiliary_add, aux_index, aux_soundex, aux_permuterm, query))
+        newcomers = se.fancy_search(auxiliary_add, aux_index, aux_soundex, aux_permuterm, query)
+        relevant.extend(newcomers)
         relevant = [song for song in relevant if song not in auxiliary_drop]
     return render_template('results.html', query=query, songs=relevant, res_num=len(relevant))
 

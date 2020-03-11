@@ -235,7 +235,7 @@ class Index:
 
 # never used, lol
 def search_and(collection, index, query):
-    relevant_documents = range(max(collection.keys() or [0]))
+    relevant_documents = range(max(collection.keys() or [0]) + 1)
     for lemma in query:
         relevant_documents = [i for i in index[lemma] if i in relevant_documents]
     return relevant_documents
@@ -332,10 +332,14 @@ def search_permuterm(term, permuterm):
 
 
 def search_or(collection, index, query):
-    relevant_documents = [0] * max(collection.keys() or [0])
+    relevant_documents = [0] * (max(collection.keys() or [0]) + 1)
     for lemma in query:
         for i in index[lemma]:
-            relevant_documents[i] = 1
+            try:
+                relevant_documents[i] = 1
+            except Exception as e:
+                print(i)
+                raise e
     res = []
     for i in range(max(collection.keys() or [0])):
         if relevant_documents[i] == 1:
