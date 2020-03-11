@@ -226,7 +226,7 @@ class Index:
 
     def __iter__(self):
         for word in self.inverted_index:
-            yield
+            yield word
 
     def __contains__(self, item):
         return item in self.inverted_index
@@ -367,9 +367,9 @@ def fancy_search(collection, index, permuterm, soundex_index, query):
             docs = index[word]
             res = [doc for doc in res if doc in docs]
         elif '*' in word:
-            # print(word + " is wildcard")
+            print(word + " is wildcard")
             terms = search_permuterm(word, permuterm)
-            # print(terms)
+            print(terms)
             if len(terms) == 0:
                 return []
             docs = search_or(collection, index, terms)
